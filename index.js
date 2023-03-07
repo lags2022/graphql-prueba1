@@ -89,9 +89,13 @@ const resolvers = {
       //   args.phone === "YES" ? person.phone : !person.phone;
       // return persons.filter(byPhone);
     },
-    findPerson: (root, args) => {
+    findPerson: async (root, args) => {
+      const { data: personsFromRestApi } = await axios.get(
+        "http://localhost:3000/persons"
+      );
       const { name } = args;
-      return persons.find((p) => p.name === name);
+      // return persons.find((p) => p.name === name);
+      return personsFromRestApi.find((p) => p.name === name);
     }, //root es el objeto que contiene los datos de la consulta
     //args es el objeto que contiene los argumentos de la consulta
   },
