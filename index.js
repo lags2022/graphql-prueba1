@@ -66,15 +66,15 @@ const resolvers = {
   Query: {
     personCount: () => persons.length,
     allPersons: async (root, args) => {
-      const { data: personsFromRestApi } = await axios.get(
-        "http://localhost:3000/persons"
-      );
-      console.log(personsFromRestApi);
+      // const { data: personsFromRestApi } = await axios.get(
+      //   "http://localhost:3000/persons"
+      // );
+      // console.log(personsFromRestApi);
 
       //no olvidar que el phone es opcional en el type person pero tbm es opcional en el query allPersons(phone: YesNo ---> aqui no esta el !), por lo que hay que comprobar si existe o no
       if (!args.phone) {
-        // return persons; //como en la query le pasamos por parametro el phone... si no existe este parametro, devolvemos todos los persons.
-        return personsFromRestApi; // aqui modificamos despues para usar los apis
+        return persons; //como en la query le pasamos por parametro el phone... si no existe este parametro, devolvemos todos los persons.
+        // return personsFromRestApi; // aqui modificamos despues para usar los apis
       }
 
       return personsFromRestApi.filter((person) => {
@@ -90,12 +90,12 @@ const resolvers = {
       // return persons.filter(byPhone);
     },
     findPerson: async (root, args) => {
-      const { data: personsFromRestApi } = await axios.get(
-        "http://localhost:3000/persons"
-      );
+      // const { data: personsFromRestApi } = await axios.get(
+      //   "http://localhost:3000/persons"
+      // );
       const { name } = args;
-      // return persons.find((p) => p.name === name);
-      return personsFromRestApi.find((p) => p.name === name);
+      return persons.find((p) => p.name === name);
+      // return personsFromRestApi.find((p) => p.name === name);
     }, //root es el objeto que contiene los datos de la consulta
     //args es el objeto que contiene los argumentos de la consulta
   },
