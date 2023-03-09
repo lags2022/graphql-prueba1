@@ -183,15 +183,22 @@ const resolvers = {
       if (!currentUser) throw new AuthenticationError("not authenticated");
       const person = await Person.findOne({ name: args.name });
       const nonFriendAlready = (person) =>
-        !currentUser.friends.map((f) => f._id).includes(person._id);
-      console.log(currentUser.friends.map((f) => f._id));
-      console.log(person._id);
-      console.log(currentUser.friends.map((f) => f._id).includes(person._id));
+        !currentUser.friends.some((f) => f._id.equals(person._id));
+
+      // const nonFriendAlready = (person) =>
+      //   !currentUser.friends.map((f) => f._id).includes(person._id); a midudev le salio con este codigo, pero a mi no me funciono
+
+      // const nonFriendAlready = (person) =>
+      //   !currentUser.friends.some((f)=>f._id.toString() === person._id.toString()); segun chatgpt funciona con este codigo pero no recomienda usarlo
+
+      // otra solucion q podria ser pero q no la comprobe es usar el unique-validator en el modelo user pero sera de comprobar.
+
       if (nonFriendAlready(person)) {
         console.log("amigo añadido");
         currentUser.friends = currentUser.friends.concat(person);
         await currentUser.save();
       }
+      console.log("amigo ya existente");
       return currentUser;
     },
   },
